@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "rapidpro.fullname" . }}-courier-config
+  labels:
+    {{- include "rapidpro.labels" . | nindent 4 }}
+data:
+  COURIER_ADDRESS: "0.0.0.0"
+  COURIER_DOMAIN: "courier:8080"
+  COURIER_BASE_URL: "http://courier:8080"
+  COURIER_DISALLOWED_NETWORKS: "6.6.6.6"
+  COURIER_LOG_LEVEL: "info"
+  COURIER_AWS_REGION: {{ .Values.aws.region | quote }}
+  AWS_EC2_METADATA_DISABLED: "true"

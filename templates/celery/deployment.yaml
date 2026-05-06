@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "rapidpro.fullname" . }}-celery
+  labels:
+    {{- include "rapidpro.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount.celery }}
+  selector:
+    matchLabels:
+      {{- include "rapidpro.selectorLabels" . | nindent 6 }}
+      component: celery
+  template:
+    metadata:
+      labels:
+        {{- include "rapidpro.selectorLabels" . | nindent 8 }}
+        component: celery
+    spec:
+      containers:
+        - name: celery
+          image: {{ .Values.images.rapidpro }}
+          command: ["celery"]
+          envFrom:
+            - configMapRef:
+                name: {{ include "rapidpro.fullname" . }}-config
+            - configMapRef:
+                name: {{ include "rapidpro.fullname" . }}-celery-config
+            - secretRef:
+                name: {{ include "rapidpro.fullname" . }}-secrets
+          resources:
+            {{- toYaml .Values.resources.celery | nindent 12 }}
+        
+        - name: cloudsql-proxy
+          image: gcr.io/cloudsql-docker/gce-proxy:latest
+          command:
+            - "/cloud_sql_proxy"
+            - "-instances={{ .Values.cloudsql.instanceConnectionName }}=tcp:5432"
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "50m"
+            limits:
+              memory: "256Mi"
+              cpu: "100m"

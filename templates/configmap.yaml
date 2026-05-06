@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "rapidpro.fullname" . }}-config
+  labels:
+    {{- include "rapidpro.labels" . | nindent 4 }}
+data:
+  # Database (todos los componentes usan esto)
+  DB_HOST: "127.0.0.1"
+  DB_PORT: "5432"
+  DB_NAME: {{ .Values.database.name | quote }}
+  DB_USER: {{ .Values.database.user | quote }}
+  
+  # Redis (todos los componentes usan esto)
+  VALKEY_HOST: {{ .Values.redis.host | quote }}
+  VALKEY_PORT: {{ .Values.redis.port | quote }}
+  VALKEY_DB: {{ .Values.redis.db | quote }}
+  
+  # Elasticsearch (indexer lo necesita)
+  ELASTIC_HOST: {{ .Values.elastic.host | quote }}
+  ELASTIC_PORT: {{ .Values.elastic.port | quote }}
+  
+  # AWS/Storage (varios componentes lo usan)
+  AWS_REGION: {{ .Values.aws.region | quote }}
+  AWS_EC2_METADATA_DISABLED: "true"
+  AWS_ACCESS_KEY_ID: "root"
+  
+  # S3/MinIO
+  S3_ENDPOINT: {{ .Values.storage.endpoint | quote }}
+  S3_PATH_STYLE: {{ .Values.storage.pathStyle | quote }}
+  S3_SESSIONS_BUCKET: {{ .Values.storage.sessionsBucket | quote }}
+  S3_ATTACHMENTS_BUCKET: {{ .Values.storage.attachmentsBucket | quote }}
+  
+  # DynamoDB
+  DYNAMO_ENDPOINT: {{ .Values.dynamodb.endpoint | quote }}
+  DYNAMO_TABLE_PREFIX: {{ .Values.dynamodb.tablePrefix | quote }}

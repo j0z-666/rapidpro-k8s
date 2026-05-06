@@ -1,0 +1,102 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "rapidpro.fullname" . }}-mailroom
+  labels:
+    {{- include "rapidpro.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount.mailroom }}
+  selector:
+    matchLabels:
+      {{- include "rapidpro.selectorLabels" . | nindent 6 }}
+      component: mailroom
+  template:
+    metadata:
+      labels:
+        {{- include "rapidpro.selectorLabels" . | nindent 8 }}
+        component: mailroom
+    spec:
+      containers:
+        - name: mailroom
+          image: {{ .Values.images.mailroom }}
+          ports:
+            - containerPort: 8090
+          envFrom:
+            - configMapRef:
+                name: {{ include "rapidpro.fullname" . }}-config
+            - configMapRef:
+                name: {{ include "rapidpro.fullname" . }}-mailroom-config
+            - secretRef:
+                name: {{ include "rapidpro.fullname" . }}-secrets
+          env:
+            - name: MAILROOM_DB
+              value: "postgres://{{ .Values.database.user }}:{{ .Values.secrets.dbPassword }}@127.0.0.1:5432/{{ .Values.database.name }}?sslmode=disable"
+            - name: MAILROOM_VALKEY
+              value: "valkey://{{ .Values.redis.host }}:{{ .Values.redis.port }}/{{ .Values.redis.db }}"
+            - name: MAILROOM_ELASTIC
+              value: "http://{{ .Values.elastic.host }}:{{ .Values.elastic.port }}"
+            - name: MAILROOM_AUTH_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "rapidpro.fullname" . }}-secrets
+                  key: MAILROOM_AUTH_TOKEN
+            - name: MAILROOM_COURIER_AUTH_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "rapidpro.fullname" . }}-secrets
+                  key: COURIER_AUTH_TOKEN
+            - name: MAILROOM_AWS_ACCESS_KEY_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "rapidpro.fullname" . }}-config
+                  key: AWS_ACCESS_KEY_ID
+            - name: MAILROOM_AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "rapidpro.fullname" . }}-secrets
+                  key: AWS_SECRET_ACCESS_KEY
+            - name: MAILROOM_DYNAMO_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "rapidpro.fullname" . }}-config
+                  key: DYNAMO_ENDPOINT
+            - name: MAILROOM_DYNAMO_TABLE_PREFIX
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "rapidpro.fullname" . }}-config
+                  key: DYNAMO_TABLE_PREFIX
+            - name: MAILROOM_S3_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "rapidpro.fullname" . }}-config
+                  key: S3_ENDPOINT
+            - name: MAILROOM_S3_PATH_STYLE
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "rapidpro.fullname" . }}-config
+                  key: S3_PATH_STYLE
+            - name: MAILROOM_S3_SESSIONS_BUCKET
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "rapidpro.fullname" . }}-config
+                  key: S3_SESSIONS_BUCKET
+            - name: MAILROOM_S3_ATTACHMENTS_BUCKET
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "rapidpro.fullname" . }}-config
+                  key: S3_ATTACHMENTS_BUCKET
+          resources:
+            {{- toYaml .Values.resources.default | nindent 12 }}
+        
+        - name: cloudsql-proxy
+          image: gcr.io/cloudsql-docker/gce-proxy:latest
+          command:
+            - "/cloud_sql_proxy"
+            - "-instances={{ .Values.cloudsql.instanceConnectionName }}=tcp:5432"
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "50m"
+            limits:
+              memory: "256Mi"
+              cpu: "100m"
