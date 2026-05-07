@@ -30,11 +30,20 @@ spec:
                 name: {{ include "rapidpro.fullname" . }}-secrets
           env:
             - name: MAILROOM_DB
-              value: "postgres://{{ .Values.database.user }}:{{ .Values.secrets.dbPassword }}@127.0.0.1:5432/{{ .Values.database.name }}?sslmode=disable"
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "rapidpro.fullname" . }}-config
+                  key: DATABASE_URL
             - name: MAILROOM_VALKEY
-              value: "valkey://{{ .Values.redis.host }}:{{ .Values.redis.port }}/{{ .Values.redis.db }}"
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "rapidpro.fullname" . }}-config
+                  key: VALKEY_URL
             - name: MAILROOM_ELASTIC
-              value: "http://{{ .Values.elastic.host }}:{{ .Values.elastic.port }}"
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "rapidpro.fullname" . }}-config
+                  key: ELASTIC_URL
             - name: MAILROOM_AUTH_TOKEN
               valueFrom:
                 secretKeyRef:
