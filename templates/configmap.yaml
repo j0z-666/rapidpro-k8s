@@ -5,21 +5,6 @@ metadata:
 	labels:
 		{{- include "rapidpro.labels" . | nindent 4 }}
 data:
-	# Database (todos los componentes usan esto), se apunta a 127.0.0.1 porque el sql proxy se ejecuta en el mismo pod
-	# DB_HOST: "127.0.0.1"
-	# DB_PORT: "5432"
-	# DB_NAME: {{ .Values.database.name | quote }}
-	# DB_USER: {{ .Values.database.user | quote }}
-
-	# # Redis (todos los componentes usan esto)
-	# VALKEY_HOST: {{ .Values.redis.host | quote }}
-	# VALKEY_PORT: {{ .Values.redis.port | quote }}
-	# VALKEY_DB: {{ .Values.redis.db | quote }}
-
-	# # Elasticsearch (indexer lo necesita)
-	# ELASTIC_HOST: {{ .Values.elastic.host | quote }}
-	# ELASTIC_PORT: {{ .Values.elastic.port | quote }}
-
 	VALKEY_URL: "valkey://{{ .Values.redis.host }}:{{ .Values.redis.port }}/{{ .Values.redis.db }}"
 	ELASTIC_URL: "http://{{ .Values.elastic.host }}:{{ .Values.elastic.port }}"
 	DATABASE_URL: "postgres://{{ .Values.database.user }}:{{ .Values.secrets.dbPassword }}@127.0.0.1:5432/{{ .Values.database.name }}?sslmode=disable"
