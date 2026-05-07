@@ -1,25 +1,25 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-	name: {{ include "rapidpro.fullname" . }}-config
-	labels:
-		{{- include "rapidpro.labels" . | nindent 4 }}
+  name: {{ include "rapidpro.fullname" . }}-config
+  labels:
+    {{- include "rapidpro.labels" . | nindent 4 }}
 data:
-	VALKEY_URL: "valkey://{{ .Values.redis.host }}:{{ .Values.redis.port }}/{{ .Values.redis.db }}"
-	ELASTIC_URL: "http://{{ .Values.elastic.host }}:{{ .Values.elastic.port }}"
-	DATABASE_URL: "postgres://{{ .Values.database.user }}:{{ .Values.secrets.dbPassword }}@127.0.0.1:5432/{{ .Values.database.name }}?sslmode=disable"
+  VALKEY_URL: "valkey://{{ .Values.redis.host }}:{{ .Values.redis.port }}/{{ .Values.redis.db }}"
+  ELASTIC_URL: "http://{{ .Values.elastic.host }}:{{ .Values.elastic.port }}"
+  DATABASE_URL: "postgres://{{ .Values.database.user }}:{{ .Values.secrets.dbPassword }}@127.0.0.1:5432/{{ .Values.database.name }}?sslmode=disable"
 
-	# AWS/Storage (varios componentes lo usan)
-	AWS_REGION: {{ .Values.aws.region | quote }}
-	AWS_EC2_METADATA_DISABLED: "true"
-	AWS_ACCESS_KEY_ID: "root"
+  # AWS/Storage (varios componentes lo usan)
+  AWS_REGION: {{ .Values.aws.region | quote }}
+  AWS_EC2_METADATA_DISABLED: "true"
+  AWS_ACCESS_KEY_ID: "root"
 
-	# S3/MinIO
-	S3_ENDPOINT: {{ .Values.storage.endpoint | quote }}
-	S3_PATH_STYLE: {{ .Values.storage.pathStyle | quote }}
-	S3_SESSIONS_BUCKET: {{ .Values.storage.sessionsBucket | quote }}
-	S3_ATTACHMENTS_BUCKET: {{ .Values.storage.attachmentsBucket | quote }}
+  # S3/MinIO
+  S3_ENDPOINT: {{ .Values.storage.endpoint | quote }}
+  S3_PATH_STYLE: {{ .Values.storage.pathStyle | quote }}
+  S3_SESSIONS_BUCKET: {{ .Values.storage.sessionsBucket | quote }}
+  S3_ATTACHMENTS_BUCKET: {{ .Values.storage.attachmentsBucket | quote }}
 
-	# DynamoDB
-	DYNAMO_ENDPOINT: {{ .Values.dynamodb.endpoint | quote }}
-	DYNAMO_TABLE_PREFIX: {{ .Values.dynamodb.tablePrefix | quote }}
+  # DynamoDB
+  DYNAMO_ENDPOINT: {{ .Values.dynamodb.endpoint | quote }}
+  DYNAMO_TABLE_PREFIX: {{ .Values.dynamodb.tablePrefix | quote }}
