@@ -18,7 +18,8 @@ spec:
     spec:
       containers:
         - name: courier
-          image: {{ .Values.images.courier }}
+          image: "{{ .Values.images.courier.repository }}:{{ .Values.images.courier.tag }}"
+          imagePullPolicy: {{ .Values.images.courier.pullPolicy }}
           ports:
             - containerPort: 8080
           envFrom:

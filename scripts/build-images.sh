@@ -2,40 +2,40 @@
 
 set -e
 
-VERSION=v26
-VERSION_INDEXER=v26.0.1
+VERSION2600=v26.0.0
+VERSION2601=v26.0.1
 CLUSTER=rapidpro-test
 
 echo "Building RapidPro..."
 
 docker build \
-  --build-arg RAPIDPRO_VERSION=$VERSION \
-  -t rapidpro:$VERSION \
+  --build-arg RAPIDPRO_VERSION=$VERSION2600 \
+  -t rapidpro:$VERSION2600 \
   ./docker/rapidpro
 
 echo "Building Mailroom..."
 
 docker build \
-  -t mailroom:$VERSION \
-  https://github.com/nyaruka/mailroom.git#$VERSION
+  -t mailroom:$VERSION2600 \
+  https://github.com/nyaruka/mailroom.git#$VERSION2600
 
 echo "Building Courier..."
 
 docker build \
-  -t courier:$VERSION \
-  https://github.com/nyaruka/courier.git#$VERSION
+  -t courier:$VERSION2601 \
+  https://github.com/nyaruka/courier.git#$VERSION2601
 
 echo "Building Indexer..."
 
 docker build \
-  -t indexer:$VERSION_INDEXER \
-  https://github.com/nyaruka/rp-indexer.git#$VERSION_INDEXER
+  -t indexer:$VERSION2601 \
+  https://github.com/nyaruka/rp-indexer.git#$VERSION2601
 
 echo "Loading images into KIND..."
 
-kind load docker-image rapidpro:$VERSION --name $CLUSTER
-kind load docker-image mailroom:$VERSION --name $CLUSTER
-kind load docker-image courier:$VERSION --name $CLUSTER
-kind load docker-image indexer:$VERSION_INDEXER --name $CLUSTER
+kind load docker-image rapidpro:$VERSION2600 --name $CLUSTER
+kind load docker-image mailroom:$VERSION2600 --name $CLUSTER
+kind load docker-image courier:$VERSION2601 --name $CLUSTER
+kind load docker-image indexer:$VERSION2601 --name $CLUSTER
 
 echo "Done 🚀"

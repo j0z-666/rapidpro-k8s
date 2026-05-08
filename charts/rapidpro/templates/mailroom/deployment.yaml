@@ -18,7 +18,8 @@ spec:
     spec:
       containers:
         - name: mailroom
-          image: {{ .Values.images.mailroom }}
+          image: "{{ .Values.images.mailroom.repository }}:{{ .Values.images.mailroom.tag }}"
+          imagePullPolicy: {{ .Values.images.mailroom.pullPolicy }}
           ports:
             - containerPort: 8090
           envFrom:

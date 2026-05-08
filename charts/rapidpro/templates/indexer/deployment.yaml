@@ -18,7 +18,8 @@ spec:
     spec:
       containers:
         - name: indexer
-          image: {{ .Values.images.indexer }}
+          image: "{{ .Values.images.indexer.repository }}:{{ .Values.images.indexer.tag }}"
+          imagePullPolicy: {{ .Values.images.indexer.pullPolicy }}
           envFrom:
             - configMapRef:
                 name: {{ include "rapidpro.fullname" . }}-config
