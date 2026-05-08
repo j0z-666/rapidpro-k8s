@@ -9,6 +9,7 @@ CLUSTER=rapidpro-test
 echo "Building RapidPro..."
 
 docker build \
+  --build-arg RAPIDPRO_VERSION=$VERSION \
   -t rapidpro:$VERSION \
   ./docker/rapidpro
 
