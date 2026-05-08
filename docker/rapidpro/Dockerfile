@@ -1,6 +1,6 @@
 FROM python:3.12-slim
 
-ARG RAPIDPRO_VERSION=mversion
+ARG RAPIDPRO_VERSION=v26.0.0
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
@@ -22,34 +22,40 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 #
-# Clonar RapidPro desde upstream
+# Clonar RapidPro
 #
 RUN git clone --branch ${RAPIDPRO_VERSION} \
     https://github.com/nyaruka/rapidpro.git .
 
 #
-# Tu settings.py custom
+# Settings custom
 #
 COPY settings.py /rapidpro/temba/settings.py
 
 #
-# Instalar dependencias Python
+# Entrypoint
 #
-RUN pip install --upgrade pip setuptools wheel
+COPY entrypoint.sh /entrypoint.sh
 
-RUN pip install -r requirements.txt
-
-#
-# Colectar estáticos
-#
-RUN python manage.py collectstatic --noinput
+RUN chmod +x /entrypoint.sh
 
 #
-# Puerto Django/Gunicorn
+# Poetry
 #
+RUN pip install --upgrade pip setuptools wheel poetry
+
+#
+# Instalar deps
+#
+RUN poetry install
+
+#
+# Static files
+#
+RUN poetry run python manage.py collectstatic --noinput
+
 EXPOSE 8000
 
-#
-# Gunicorn
-#
-CMD ["gunicorn", "temba.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "4"]
+ENTRYPOINT ["/entrypoint.sh"]
+
+CMD ["webapp"]

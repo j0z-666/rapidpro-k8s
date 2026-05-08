@@ -20,7 +20,8 @@ spec:
         - name: rapidpro
           image: "{{ .Values.images.rapidpro.repository }}:{{ .Values.images.rapidpro.tag }}"
           imagePullPolicy: {{ .Values.images.rapidpro.pullPolicy }}
-          command: ["webapp"]
+          args:
+            - webapp
           ports:
             - containerPort: 8000
           envFrom:
