@@ -32,6 +32,11 @@ spec:
             - secretRef:
                 name: {{ include "rapidpro.fullname" . }}-secrets
           env:
+            - name: DYNAMO_ENDPOINT_URL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "rapidpro.fullname" . }}-config
+                  key: DYNAMO_ENDPOINT
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
