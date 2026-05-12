@@ -47,7 +47,7 @@ spec:
                   key: COURIER_AUTH_TOKEN
             - name: COURIER_AWS_ACCESS_KEY_ID
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   name: {{ include "rapidpro.fullname" . }}-secrets
                   key: AWS_ACCESS_KEY_ID
             - name: COURIER_AWS_SECRET_ACCESS_KEY
