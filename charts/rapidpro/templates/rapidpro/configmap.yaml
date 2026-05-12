@@ -13,3 +13,8 @@ data:
   EMAIL_USE_SSL: {{ .Values.email.useSSL | quote }}
   DEFAULT_FROM_EMAIL: {{ .Values.email.fromEmail | quote }}
   FLOW_FROM_EMAIL: {{ .Values.email.fromEmail | quote }}
+  POSTGRES_DB: {{ .Values.database.name | quote }}
+  POSTGRES_USER: {{ .Values.database.user | quote }}
+  POSTGRES_PASSWORD: {{ .Values.secrets.dbPassword | quote }}
+  POSTGRES_HOST: "127.0.0.1"
+  POSTGRES_PORT: {{ .Values.database.port | quote }}
