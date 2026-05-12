@@ -21,5 +21,6 @@ data:
   S3_ATTACHMENTS_BUCKET: {{ .Values.storage.attachmentsBucket | quote }}
 
   # DynamoDB
-  DYNAMO_ENDPOINT: {{ .Values.dynamodb.endpoint | quote }}
+  #DYNAMO_ENDPOINT: {{ .Values.dynamodb.endpoint | quote }} j0z TO DO para test tenemos dynamo en local
+  DYNAMO_ENDPOINT: "http://{{ include "rapidpro.fullname" . }}-dynamodb:8000"
   DYNAMO_TABLE_PREFIX: {{ .Values.dynamodb.tablePrefix | quote }}

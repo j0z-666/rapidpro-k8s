@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "rapidpro.fullname" . }}-dynamodb
+  labels:
+    {{- include "rapidpro.labels" . | nindent 4 }}
+    component: dynamodb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "rapidpro.selectorLabels" . | nindent 6 }}
+      component: dynamodb
+  template:
+    metadata:
+      labels:
+        {{- include "rapidpro.selectorLabels" . | nindent 8 }}
+        component: dynamodb
+    spec:
+      containers:
+        - name: dynamodb
+          image: amazon/dynamodb-local
+          command: ["-jar", "DynamoDBLocal.jar", "-sharedDb", "-dbPath", "/data"]
+          user: "0"
+          ports:
+            - containerPort: 8000
+          volumeMounts:
+            - name: dynamodb-data
+              mountPath: /data
+          livenessProbe:
+            exec:
+              command:
+                [
+                  "sh", "-c",
+                  "curl -s -X POST http://localhost:8000 -H 'X-Amz-Target: DynamoDB_20120810.ListTables' -H 'Content-Type: application/x-amz-json-1.0' -d '{}' >/dev/null || exit 1"
+                ]
+            initialDelaySeconds: 10
+            periodSeconds: 10
+      volumes:
+        - name: dynamodb-data
+          emptyDir: {}
