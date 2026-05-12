@@ -35,7 +35,7 @@ spec:
             - name: DYNAMO_ENDPOINT_URL
               valueFrom:
                 configMapKeyRef:
-                  name: {{ include "rapidpro.fullname" . }}-config
+                  name: {{ include "rapidpro.fullname" . }}-secrets
                   key: DYNAMO_ENDPOINT
             - name: DB_PASSWORD
               valueFrom:
