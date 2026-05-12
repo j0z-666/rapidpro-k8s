@@ -58,7 +58,7 @@ spec:
             - name: MAILROOM_AWS_ACCESS_KEY_ID
               valueFrom:
                 configMapKeyRef:
-                  name: {{ include "rapidpro.fullname" . }}-config
+                  name: {{ include "rapidpro.fullname" . }}-secrets
                   key: AWS_ACCESS_KEY_ID
             - name: MAILROOM_AWS_SECRET_ACCESS_KEY
               valueFrom:

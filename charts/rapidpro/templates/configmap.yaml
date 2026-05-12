@@ -12,7 +12,7 @@ data:
   # AWS/Storage (varios componentes lo usan)
   AWS_REGION: {{ .Values.aws.region | quote }}
   AWS_EC2_METADATA_DISABLED: "true"
-  AWS_ACCESS_KEY_ID: "root"
+
 
   # S3/MinIO
   S3_ENDPOINT: {{ .Values.storage.endpoint | quote }}
