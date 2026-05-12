@@ -124,6 +124,11 @@ AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")
 AWS_REGION = os.environ.get("AWS_REGION", "us-east-1")
 
+DYNAMO_ENDPOINT_URL = os.environ.get("DYNAMO_ENDPOINT_URL", "")
+DYNAMO_TABLE_PREFIX = os.environ.get("DYNAMO_TABLE_PREFIX", "")
+
+ELASTIC_ENDPOINT_URL = os.environ.get("ELASTIC_ENDPOINT_URL", "http://elastic:9200")
+
 S3_SESSIONS_BUCKET = os.environ.get("S3_SESSIONS_BUCKET", "rapidpro-sessions")
 S3_ATTACHMENTS_BUCKET = os.environ.get("S3_ATTACHMENTS_BUCKET", "rapidpro-attachments")
 
