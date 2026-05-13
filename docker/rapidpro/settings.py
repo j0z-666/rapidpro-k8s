@@ -168,3 +168,5 @@ AWS_S3_ADDRESSING_STYLE = "path" if os.environ.get("S3_PATH_STYLE", "true").lowe
 AWS_S3_FILE_OVERWRITE = False
 
 STORAGE_URL = f"{AWS_S3_ENDPOINT_URL}/{S3_ATTACHMENTS_BUCKET}"
+
+STATIC_URL = "/static/"
