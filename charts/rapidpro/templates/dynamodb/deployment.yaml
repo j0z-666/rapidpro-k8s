@@ -20,7 +20,7 @@ spec:
       containers:
         - name: dynamodb
           image: amazon/dynamodb-local
-          command: ["-jar", "DynamoDBLocal.jar", "-sharedDb", "-dbPath", "/data"]
+          command: ["java", "-jar", "DynamoDBLocal.jar", "-sharedDb", "-dbPath", "/data"]
           user: "0"
           ports:
             - containerPort: 8000
