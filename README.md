@@ -7,4 +7,4 @@ docker build --no-cache -f docker/rapidpro/Dockerfile -t us-central1-docker.pkg.
 docker push us-central1-docker.pkg.dev/nonodev/nonodev/rapidpro:v26.0.0
 
 helm upgrade rapidpro ./charts/rapidpro -n rapidpro -f ./charts/rapidpro/values.yaml
-
+ kubectl rollout restart deployment/rapidpro-rapidpro-rapidpro -n rapidpro
