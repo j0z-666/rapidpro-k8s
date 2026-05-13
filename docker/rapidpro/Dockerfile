@@ -16,10 +16,20 @@ RUN apt-get update && apt-get install -y \
     g++ \
     build-essential \
     libpq-dev \
+    libgdal-dev \
+    ffmpeg \
+    nodejs \ 
+    npm \
     gettext \
     curl \
     libmagic1 \
     && rm -rf /var/lib/apt/lists/*
+
+ENV PATH="/root/.local/bin:$PATH"
+ENV POETRY_VIRTUALENVS_IN_PROJECT=true
+RUN npm install -g n && n 20
+RUN npm install -g yarn less
+
 
 #
 # Clonar RapidPro
@@ -27,7 +37,10 @@ RUN apt-get update && apt-get install -y \
 RUN git clone --branch ${RAPIDPRO_VERSION} \
     https://github.com/nyaruka/rapidpro.git .
 
-#
+RUN poetry install --no-root
+RUN yarn install
+
+    #
 # Settings custom
 #
 COPY settings.py /rapidpro/temba/settings.py
