@@ -40,10 +40,10 @@ DATABASES = {
 # REDIS
 # ------------------------------------------------------------------------------
 
-REDIS_HOST = os.environ.get("REDIS_HOST", "redis")
-REDIS_PORT = int(os.environ.get("REDIS_PORT", "6379"))
+# REDIS_HOST = os.environ.get("REDIS_HOST", "redis")
+# REDIS_PORT = int(os.environ.get("REDIS_PORT", "6379"))
 
-REDIS_URL = f"redis://{REDIS_HOST}:{REDIS_PORT}/0"
+REDIS_URL = os.environ.get("VALKEY_URL", "")
 
 # ------------------------------------------------------------------------------
 # CELERY
@@ -168,5 +168,17 @@ AWS_S3_ADDRESSING_STYLE = "path" if os.environ.get("S3_PATH_STYLE", "true").lowe
 AWS_S3_FILE_OVERWRITE = False
 
 STORAGE_URL = f"{AWS_S3_ENDPOINT_URL}/{S3_ATTACHMENTS_BUCKET}"
+
+
+# -----------------------------------------------------------------------------------
+# Cache
+# -----------------------------------------------------------------------------------
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_valkey.cache.ValkeyCache",
+        "LOCATION": REDIS_URL,
+    }
+}
 
 # STATIC_URL = "/static/"
