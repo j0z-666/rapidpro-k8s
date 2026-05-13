@@ -37,10 +37,9 @@ RUN npm install -g yarn less
 RUN git clone --branch ${RAPIDPRO_VERSION} \
     https://github.com/nyaruka/rapidpro.git .
 
-RUN poetry install --no-root
 RUN yarn install
 
-    #
+#
 # Settings custom
 #
 COPY settings.py /rapidpro/temba/settings.py
