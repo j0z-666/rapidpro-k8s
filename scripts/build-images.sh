@@ -4,7 +4,7 @@ set -e
 
 VERSION2600=v26.0.0
 VERSION2601=v26.0.1
-REGISTRY=us-central1-docker.pkg.dev/nonodev/nonodev
+REGISTRY=us-central1-docker.pkg.dev/mgcp-10078073-nono-card-dev/nonodev-rapidpro
 
 echo "Building RapidPro..."
 
