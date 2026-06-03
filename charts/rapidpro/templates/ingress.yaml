@@ -3,25 +3,17 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ include "rapidpro.fullname" . }}-ingress
+  annotations:
+    kubernetes.io/ingress.class: "gce"
   labels:
     {{- include "rapidpro.labels" . | nindent 4 }}
 
-  annotations:
-    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
-    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
-    nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
-
 spec:
-  ingressClassName: {{ .Values.ingress.className }}
-
+  ingressClassName: {{ .Values.ingress.className }}   # Use 'gce'
   rules:
     - host: {{ .Values.ingress.hostname | quote }}
       http:
         paths:
-
-          # =========================
-          # RapidPro Web
-          # =========================
           - path: /
             pathType: Prefix
             backend:
@@ -30,9 +22,6 @@ spec:
                 port:
                   number: 8000
 
-          # =========================
-          # Mailroom
-          # =========================
           - path: /mr/
             pathType: Prefix
             backend:
@@ -41,9 +30,6 @@ spec:
                 port:
                   number: 8090
 
-          # =========================
-          # Courier
-          # =========================
           - path: /c/
             pathType: Prefix
             backend:
@@ -51,5 +37,4 @@ spec:
                 name: {{ include "rapidpro.fullname" . }}-courier
                 port:
                   number: 8080
-
 {{- end }}

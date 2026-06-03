@@ -2,7 +2,7 @@
 
 set -e
 
-export REMOTE_CONTAINERS=true
+#export REMOTE_CONTAINERS=true Alberto: needs to be false in k8s
 export POSTGIS=off
 
 ACTION=${1:-webapp}

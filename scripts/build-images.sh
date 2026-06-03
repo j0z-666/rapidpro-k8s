@@ -9,6 +9,7 @@ REGISTRY=us-central1-docker.pkg.dev/mgcp-10078073-nono-card-dev/nonodev-rapidpro
 echo "Building RapidPro..."
 
 docker build \
+  --no-cache \
   --build-arg RAPIDPRO_VERSION=$VERSION2600 \
   -t rapidpro:$VERSION2600 \
   -t $REGISTRY/rapidpro:$VERSION2600 \

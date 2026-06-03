@@ -21,7 +21,8 @@ spec:
         - name: dynamodb
           image: amazon/dynamodb-local
           command: ["java", "-jar", "DynamoDBLocal.jar", "-sharedDb", "-dbPath", "/data"]
-          user: "0"
+          securityContext:
+            runAsUser: 1000
           ports:
             - containerPort: 8000
           volumeMounts:
@@ -34,7 +35,7 @@ spec:
                   "sh", "-c",
                   "curl -s -X POST http://localhost:8000 -H 'X-Amz-Target: DynamoDB_20120810.ListTables' -H 'Content-Type: application/x-amz-json-1.0' -d '{}' >/dev/null || exit 1"
                 ]
-            initialDelaySeconds: 10
+            initialDelaySeconds: 90
             periodSeconds: 10
       volumes:
         - name: dynamodb-data

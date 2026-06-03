@@ -49,17 +49,17 @@ spec:
               path: /msg
               port: 8000
             initialDelaySeconds: 180
-            timeoutSeconds: 60
+            timeoutSeconds: 5
             periodSeconds: 15
-            failureThreshold: 6
+            failureThreshold: 12
           readinessProbe:
             httpGet:
               path: /msg
               port: 8000
             initialDelaySeconds: 180
-            timeoutSeconds: 60
+            timeoutSeconds: 5
             periodSeconds: 15
-            failureThreshold: 6
+            failureThreshold: 12
         
         - name: cloudsql-proxy
           image: gcr.io/cloudsql-docker/gce-proxy:latest

@@ -49,7 +49,8 @@ REDIS_URL = os.environ.get("VALKEY_URL", "")
 # CELERY
 # ------------------------------------------------------------------------------
 
-CELERY_BROKER_URL = REDIS_URL
+#CELERY_BROKER_URL = REDIS_URL
+CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL", "")
 
 # ------------------------------------------------------------------------------
 # MAILROOM

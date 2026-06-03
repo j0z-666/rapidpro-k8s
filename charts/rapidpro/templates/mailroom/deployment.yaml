@@ -97,6 +97,14 @@ spec:
                   key: S3_ATTACHMENTS_BUCKET
           resources:
             {{- toYaml .Values.resources.default | nindent 12 }}
+
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8090 # Use whatever port mailroom/courier use (8090 / 8080)
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+            periodSeconds: 15
         
         - name: cloudsql-proxy
           image: gcr.io/cloudsql-docker/gce-proxy:latest

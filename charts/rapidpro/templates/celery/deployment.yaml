@@ -29,6 +29,7 @@ spec:
                 name: {{ include "rapidpro.fullname" . }}-celery-config
             - secretRef:
                 name: {{ include "rapidpro.fullname" . }}-secrets
+            
           resources:
             {{- toYaml .Values.resources.celery | nindent 12 }}
         

@@ -7,3 +7,9 @@ metadata:
 data:
   MAILROOM_URL: "http://{{ include "rapidpro.fullname" . }}-mailroom:8090"
   MAILROOM_AUTH_TOKEN: {{ .Values.tokens.mailroomAuthToken | quote }}
+  CELERY_BROKER_URL: "redis://{{ .Values.redis.host }}:{{ .Values.redis.port }}/{{ .Values.redis.db }}"
+  POSTGRES_DB: {{ .Values.database.name | quote }}
+  POSTGRES_USER: {{ .Values.database.user | quote }}
+  POSTGRES_PASSWORD: {{ .Values.secrets.dbPassword | quote }}
+  POSTGRES_HOST: "127.0.0.1"
+  POSTGRES_PORT: {{ .Values.database.port | quote }}
