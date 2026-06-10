@@ -4,6 +4,8 @@ metadata:
   name: {{ include "rapidpro.fullname" . }}-mailroom
   labels:
     {{- include "rapidpro.labels" . | nindent 4 }}
+  annotations:
+    cloud.google.com/backend-config: '{"default": "{{ include "rapidpro.fullname" . }}-mailroom-backendconfig"}'
 spec:
   type: NodePort
   ports:

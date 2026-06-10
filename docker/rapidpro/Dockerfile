@@ -61,10 +61,16 @@ RUN pip install --upgrade pip setuptools wheel poetry
 #
 RUN poetry install
 
+#Servir archivos estaticos
+RUN poetry install --no-interaction --no-root && \
+    poetry run pip install whitenoise
+
 #
 # Static files
 #
-RUN poetry run python manage.py collectstatic --noinput
+RUN ls -l /rapidpro/static || (echo "Static dir missing!" && exit 1)
+RUN poetry run python manage.py collectstatic --noinput --verbosity 2 || (echo "collectstatic failed!" && exit 1)
+RUN ls -l /rapidpro/sitestatic || (echo "sitestatic missing!" && exit 1)
 
 EXPOSE 8000
 

@@ -17,4 +17,4 @@ docker build \
 docker push us-central1-docker.pkg.dev/mgcp-10078073-nono-card-dev/nonodev-rapidpro/rapidpro:v26.0.0
 
 helm upgrade rapidpro ./charts/rapidpro -n rapidpro -f ./charts/rapidpro/values.yaml
- kubectl rollout restart deployment/rapidpro-rapidpro-rapidpro -n rapidpro
+kubectl rollout restart deployment/rapidpro-rapidpro-rapidpro -n rapidpro

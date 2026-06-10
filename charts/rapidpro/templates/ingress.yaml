@@ -5,11 +5,22 @@ metadata:
   name: {{ include "rapidpro.fullname" . }}-ingress
   annotations:
     kubernetes.io/ingress.class: "gce"
+    kubernetes.io/ingress.global-static-ip-name: {{ .Values.ingress.staticIpName | quote }}
+    networking.gke.io/managed-certificates: {{ .Values.ingress.tls.managedCertificateName | quote }}
+    {{- if .Values.ingress.tls.enabled }}
+    kubernetes.io/ingress.allow-http: "false"   # Optional, if you want to disable HTTP and force HTTPS only
+    {{- end }}
+    gcp-certificate-retry: "bump-1" #dunny annotation
   labels:
     {{- include "rapidpro.labels" . | nindent 4 }}
 
 spec:
   ingressClassName: {{ .Values.ingress.className }}   # Use 'gce'
+  # {{- if .Values.ingress.tls.enabled }} Alberto, Removed because its not necessary in gcp
+  # tls:
+  #   - hosts:
+  #       - {{ .Values.ingress.hostname }}
+  # {{- end }}
   rules:
     - host: {{ .Values.ingress.hostname | quote }}
       http:

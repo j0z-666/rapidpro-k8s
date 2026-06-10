@@ -42,6 +42,10 @@ spec:
                 secretKeyRef:
                   name: {{ include "rapidpro.fullname" . }}-secrets
                   key: DB_PASSWORD
+            {{- range .Values.extraEnv }}
+            - name: {{ .name }}
+              value: {{ .value | quote }}
+            {{- end }} 
           resources:
             {{- toYaml .Values.resources.rapidpro | nindent 12 }}
           livenessProbe:
@@ -60,6 +64,12 @@ spec:
             timeoutSeconds: 5
             periodSeconds: 15
             failureThreshold: 12
+          
+          volumeMounts:
+            # Este bloque agarra el "disco" de arriba y lo mete en una carpeta dentro del contenedor
+            - name: gcs-key-volume
+              mountPath: /var/secrets/google
+              readOnly: true
         
         - name: cloudsql-proxy
           image: gcr.io/cloudsql-docker/gce-proxy:latest
@@ -73,3 +83,8 @@ spec:
             limits:
               memory: "256Mi"
               cpu: "100m"
+      volumes:
+        # Este bloque le dice al Pod: "Ve a buscar el Secret de Helm y prepáralo como un disco"
+        - name: gcs-key-volume
+          secret:
+            secretName: rapidpro-gcs-credentials

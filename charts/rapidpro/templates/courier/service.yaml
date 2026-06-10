@@ -4,6 +4,8 @@ metadata:
   name: {{ include "rapidpro.fullname" . }}-courier
   labels:
     {{- include "rapidpro.labels" . | nindent 4 }}
+  annotations:
+    cloud.google.com/backend-config: '{"default": "{{ include "rapidpro.fullname" . }}-courier-backendconfig"}'
 spec:
   type: NodePort
   ports:

@@ -36,8 +36,6 @@ DATABASES = {
     }
 }
 
-DATABASES["readonly"] = DATABASES["default"].copy()
-
 # ------------------------------------------------------------------------------
 # REDIS
 # ------------------------------------------------------------------------------
@@ -62,12 +60,6 @@ MAILROOM_URL = os.environ.get(
     "MAILROOM_URL",
     "http://mailroom:8090"
 )
-
-MAILROOM_AUTH_TOKEN = os.environ.get(
-    "MAILROOM_AUTH_TOKEN",
-    ""
-)
-
 
 # ------------------------------------------------------------------------------
 # STORAGE
@@ -106,22 +98,7 @@ LOGGING = {
 # BRANDING
 # ------------------------------------------------------------------------------
 
-BRAND = {
-    "name": "RapidPro",
-    "description": "Visually build nationally scalable mobile applications anywhere in the world.",
-    "hosts": ["nncd.mx"],
-    "domain": "rapidpro.nncd.mx",
-    "emails": {"notifications": "nono.desarrollo@broxel.com"},
-    "logos": {
-        "primary": "images/logo-dark.svg",
-        "favico": "https://nonocard.com/wp-content/uploads/2024/11/cropped-iconnono-32x32.png",
-        "avatar": "brands/rapidpro/rapidpro-avatar.webp",
-    },
-    "landing": {
-        "hero": "brands/rapidpro/splash.jpg",
-    },
-    "features": ["signups", "sso"],
-}
+ORG_BRAND = "Nono Labs"
 
 # ------------------------------------------------------------------------------
 # TIMEZONE
@@ -132,11 +109,35 @@ TIME_ZONE = "America/Mexico_City"
 # ------------------------------------------------------------------------------
 # STATIC
 # ------------------------------------------------------------------------------
-STATIC_URL = "/sitestatic/"
-print(f"PROJECT_DIR: {PROJECT_DIR}")
-print(f"STATIC_ROOT: {STATIC_ROOT}")
-print(f"STATIC_URL: {STATIC_URL}")
 
+# Set BASE_DIR to project root
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+#   settings.py -> /rapidpro/temba/   (.dirname)
+#               -> /rapidpro/         (.dirname again)
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, "static"),
+    os.path.join(BASE_DIR, "node_modules/@nyaruka/flow-editor/build"),
+    os.path.join(BASE_DIR, "node_modules/@nyaruka/temba-components/dist/static"),
+    os.path.join(BASE_DIR, "node_modules"),
+    os.path.join(BASE_DIR, "node_modules/react/umd"),
+    os.path.join(BASE_DIR, "node_modules/react-dom/umd"),
+    # DO NOT include media here!
+)
+
+STATIC_ROOT = os.path.join(BASE_DIR, "sitestatic")       # Collected static files go here!
+STATIC_URL = "/sitestatic/"
+
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_URL = "/media/"
+
+STATICFILES_FINDERS = (
+    "django.contrib.staticfiles.finders.FileSystemFinder",
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+    "compressor.finders.CompressorFinder",  # Only if you use django-compressor!
+)
+
+COMPRESS_ROOT = STATIC_ROOT
 # ------------------------------------------------------------------------------
 # INTERNAL ADDRESSES
 # ------------------------------------------------------------------------------
@@ -144,11 +145,6 @@ print(f"STATIC_URL: {STATIC_URL}")
 INTERNAL_IPS = ["127.0.0.1"]
 
 ##ALBERTO NONO DEV
-MIDDLEWARE = (
-    MIDDLEWARE[:1]
-    + ("whitenoise.middleware.WhiteNoiseMiddleware",)
-    + MIDDLEWARE[1:]
-)
 
 AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")
@@ -188,8 +184,7 @@ STORAGES = {
         },
     },
     "staticfiles": {
-        # "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
-        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
     },
 }
 
@@ -213,12 +208,3 @@ CACHES = {
 }
 
 # STATIC_URL = "/static/"
-
-##EMAIL
-EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.gmail.com")
-EMAIL_PORT = int(os.getenv("EMAIL_PORT", 587))
-EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")
-EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
-EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "true").lower() == "true"
-EMAIL_USE_SSL = os.getenv("EMAIL_USE_SSL", "false").lower() == "true"
-EMAIL_TIMEOUT = int(os.getenv("EMAIL_TIMEOUT", 10))
