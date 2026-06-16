@@ -20,6 +20,10 @@ data:
   S3_SESSIONS_BUCKET: {{ .Values.storage.sessionsBucket | quote }}
   S3_ATTACHMENTS_BUCKET: {{ .Values.storage.attachmentsBucket | quote }}
 
+  #Alberto: para compatibilidad con GCS
+  AWS_REQUEST_CHECKSUM_CALCULATION: "when_required"
+  AWS_RESPONSE_CHECKSUM_VALIDATION: "when_required"
+
   # DynamoDB
   #DYNAMO_ENDPOINT: {{ .Values.dynamodb.endpoint | quote }} j0z TO DO para test tenemos dynamo en local
   DYNAMO_ENDPOINT: "http://{{ include "rapidpro.fullname" . }}-dynamodb:8000"
