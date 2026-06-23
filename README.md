@@ -14,7 +14,16 @@ docker build \
   -t us-central1-docker.pkg.dev/mgcp-10078073-nono-card-dev/nonodev-rapidpro/rapidpro:v26.0.0 \
   ./docker/rapidpro
 
-docker push us-central1-docker.pkg.dev/mgcp-10078073-nono-card-dev/nonodev-rapidpro/rapidpro:v26.0.0
+docker build \
+  --no-cache \
+  --build-arg RAPIDPRO_VERSION=main \
+  -t rapidpro:main \
+  -t us-central1-docker.pkg.dev/mgcp-10078073-nono-card-dev/nonodev-rapidpro/rapidpro:main \
+  ./docker/rapidpro
+
+docker push us-central1-docker.pkg.dev/mgcp-10078073-nono-card-dev/nonodev-rapidpro/rapidpro:main
 
 helm upgrade rapidpro ./charts/rapidpro -n rapidpro -f ./charts/rapidpro/values.yaml
 kubectl rollout restart deployment/rapidpro-rapidpro-rapidpro -n rapidpro
+
+helm install rapidpro ./charts/rapidpro

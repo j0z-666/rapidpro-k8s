@@ -1,3 +1,4 @@
+{{- if .Values.images.indexer.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -31,7 +32,7 @@ spec:
             - name: INDEXER_DB
               value: "postgres://{{ .Values.database.user }}:{{ .Values.secrets.dbPassword }}@127.0.0.1:5432/{{ .Values.database.name }}?sslmode=disable"
             - name: INDEXER_ELASTIC_URL
-              value: "http://{{ .Values.elastic.host }}:{{ .Values.elastic.port }}"
+              value: "{{ .Values.elastic.url }}:{{ .Values.elastic.port }}"
           resources:
             {{- toYaml .Values.resources.default | nindent 12 }}
         
@@ -47,3 +48,4 @@ spec:
             limits:
               memory: "256Mi"
               cpu: "100m"
+{{- end }}

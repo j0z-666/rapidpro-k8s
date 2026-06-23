@@ -4,5 +4,5 @@ metadata:
   name: {{ include "rapidpro.fullname" . }}-courier-backendconfig
 spec:
   healthCheck:
-    requestPath: /status
+    requestPath: /
     port: 8080

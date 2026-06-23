@@ -48,4 +48,12 @@ spec:
                 name: {{ include "rapidpro.fullname" . }}-courier
                 port:
                   number: 8080
+          
+          - path: /ci/
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "rapidpro.fullname" . }}-courier
+                port:
+                  number: 8081
 {{- end }}

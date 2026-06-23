@@ -1,11 +1,12 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ include "rapidpro.fullname" . }}-dynamodb
   labels:
     {{- include "rapidpro.labels" . | nindent 4 }}
     component: dynamodb
 spec:
+  serviceName: {{ include "rapidpro.fullname" . }}-dynamodb
   replicas: 1
   selector:
     matchLabels:
@@ -17,6 +18,8 @@ spec:
         {{- include "rapidpro.selectorLabels" . | nindent 8 }}
         component: dynamodb
     spec:
+      securityContext:
+        fsGroup: 1000
       containers:
         - name: dynamodb
           image: amazon/dynamodb-local
@@ -37,6 +40,12 @@ spec:
                 ]
             initialDelaySeconds: 90
             periodSeconds: 10
-      volumes:
-        - name: dynamodb-data
-          emptyDir: {}
+  volumeClaimTemplates:
+    - metadata:
+        name: dynamodb-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: standard-rwo
+        resources:
+          requests:
+            storage: 5Gi

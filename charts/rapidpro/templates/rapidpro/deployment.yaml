@@ -20,6 +20,10 @@ spec:
         - name: rapidpro
           image: "{{ .Values.images.rapidpro.repository }}:{{ .Values.images.rapidpro.tag }}"
           imagePullPolicy: {{ .Values.images.rapidpro.pullPolicy }}
+          # command:
+          #   - tail
+          #   - -f
+          #   - /dev/null
           args:
             - webapp
           ports:
@@ -42,6 +46,8 @@ spec:
                 secretKeyRef:
                   name: {{ include "rapidpro.fullname" . }}-secrets
                   key: DB_PASSWORD
+            - name: ELASTIC_ENDPOINT_URL
+              value: "{{ .Values.elastic.url }}:{{ .Values.elastic.port }}"
             {{- range .Values.extraEnv }}
             - name: {{ .name }}
               value: {{ .value | quote }}

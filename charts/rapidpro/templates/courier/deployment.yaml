@@ -22,6 +22,10 @@ spec:
           imagePullPolicy: {{ .Values.images.courier.pullPolicy }}
           ports:
             - containerPort: 8080
+              name: public
+            - containerPort: 8081
+              name: internal
+          
           envFrom:
             - configMapRef:
                 name: {{ include "rapidpro.fullname" . }}-config

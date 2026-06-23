@@ -5,10 +5,12 @@ metadata:
   labels:
     {{- include "rapidpro.labels" . | nindent 4 }}
 data:
-  MAILROOM_ADDRESS: "0.0.0.0"
+  MAILROOM_PUBLIC_ADDRESS: "0.0.0.0"
+  MAILROOM_INTERNAL_ADDRESS: "0.0.0.0"
   # MAILROOM_DOMAIN: "{{ include "rapidpro.fullname" . }}-courier:8080"
   # MAILROOM_ATTACHMENT_DOMAIN: "{{ include "rapidpro.fullname" . }}-courier:8080"
-  MAILROOM_DOMAIN: "rapidpro.nncd.mx"
+  # MAILROOM_DOMAIN: "rapidpro.nncd.mx" OLD ENDPOINT?
+  MAILROOM_COURIER_ENDPOINT: "https://rapidpro.nncd.mx" #nuevo en 2026-July Snapshot
   MAILROOM_ATTACHMENT_DOMAIN: "rapidpro.nncd.mx"
   MAILROOM_DISALLOWED_NETWORKS: "6.6.6.6"
   MAILROOM_LOG_LEVEL: "info"

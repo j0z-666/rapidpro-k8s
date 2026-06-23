@@ -9,10 +9,12 @@ metadata:
 spec:
   type: NodePort
   ports:
-    - port: 8090
-      targetPort: 8090
-      protocol: TCP
-      name: http
+    - name: public
+      port: 8090
+      targetPort: public
+    - name: internal
+      port: 8091
+      targetPort: internal
   selector:
     {{- include "rapidpro.selectorLabels" . | nindent 4 }}
     component: mailroom

@@ -5,7 +5,8 @@ metadata:
   labels:
     {{- include "rapidpro.labels" . | nindent 4 }}
 data:
-  COURIER_ADDRESS: "0.0.0.0"
+  COURIER_PUBLIC_ADDRESS: "0.0.0.0"
+  COURIER_INTERNAL_ADDRESS: "0.0.0.0"
   COURIER_DOMAIN: "{{ include "rapidpro.fullname" . }}-courier:8080"
   COURIER_BASE_URL: "http://{{ include "rapidpro.fullname" . }}-courier:8080"
   COURIER_DISALLOWED_NETWORKS: "6.6.6.6"
