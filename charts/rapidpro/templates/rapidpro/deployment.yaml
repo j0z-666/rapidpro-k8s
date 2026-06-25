@@ -47,7 +47,10 @@ spec:
                   name: {{ include "rapidpro.fullname" . }}-secrets
                   key: DB_PASSWORD
             - name: ELASTIC_ENDPOINT_URL
-              value: "{{ .Values.elastic.url }}:{{ .Values.elastic.port }}"
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "rapidpro.fullname" . }}-config
+                  key: ELASTIC_URL
             {{- range .Values.extraEnv }}
             - name: {{ .name }}
               value: {{ .value | quote }}

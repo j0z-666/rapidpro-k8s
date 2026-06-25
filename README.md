@@ -9,19 +9,12 @@ chmod +x scripts/build-images.sh
 
 docker build \
   --no-cache \
-  --build-arg RAPIDPRO_VERSION=v26.0.0 \
-  -t rapidpro:v26.0.0 \
-  -t us-central1-docker.pkg.dev/mgcp-10078073-nono-card-dev/nonodev-rapidpro/rapidpro:v26.0.0 \
+  --build-arg RAPIDPRO_VERSION=nonoBranch \
+  -t rapidpro:nonoBranch \
+  -t us-central1-docker.pkg.dev/mgcp-10078073-nono-card-dev/nonodev-rapidpro/rapidpro:nonoBranch \
   ./docker/rapidpro
 
-docker build \
-  --no-cache \
-  --build-arg RAPIDPRO_VERSION=main \
-  -t rapidpro:main \
-  -t us-central1-docker.pkg.dev/mgcp-10078073-nono-card-dev/nonodev-rapidpro/rapidpro:main \
-  ./docker/rapidpro
-
-docker push us-central1-docker.pkg.dev/mgcp-10078073-nono-card-dev/nonodev-rapidpro/rapidpro:main
+docker push us-central1-docker.pkg.dev/mgcp-10078073-nono-card-dev/nonodev-rapidpro/rapidpro:nonoBranch
 
 helm upgrade rapidpro ./charts/rapidpro -n rapidpro -f ./charts/rapidpro/values.yaml
 kubectl rollout restart deployment/rapidpro-rapidpro-rapidpro -n rapidpro

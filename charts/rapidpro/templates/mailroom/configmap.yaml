@@ -7,6 +7,9 @@ metadata:
 data:
   MAILROOM_PUBLIC_ADDRESS: "0.0.0.0"
   MAILROOM_INTERNAL_ADDRESS: "0.0.0.0"
+  MAILROOM_ELASTIC_ENDPOINT: {{ .Values.elastic.url }}
+  MAILROOM_ELASTIC_USERNAME: {{ .Values.elastic.user | quote }}
+  MAILROOM_ELASTIC_PASSWORD: {{.Values.secrets.elasticPassword | quote }}
   # MAILROOM_DOMAIN: "{{ include "rapidpro.fullname" . }}-courier:8080"
   # MAILROOM_ATTACHMENT_DOMAIN: "{{ include "rapidpro.fullname" . }}-courier:8080"
   # MAILROOM_DOMAIN: "rapidpro.nncd.mx" OLD ENDPOINT?

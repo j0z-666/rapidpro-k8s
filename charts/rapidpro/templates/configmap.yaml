@@ -6,7 +6,7 @@ metadata:
     {{- include "rapidpro.labels" . | nindent 4 }}
 data:
   VALKEY_URL: "valkey://{{ .Values.redis.host }}:{{ .Values.redis.port }}/{{ .Values.redis.db }}"
-  ELASTIC_URL: "{{ .Values.elastic.url }}:{{ .Values.elastic.port }}"
+  ELASTIC_URL: "{{ .Values.elastic.user }}:{{ .Values.secrets.elasticPassword }}@{{ .Values.elastic.domain }}:{{ .Values.elastic.port }}"
   DATABASE_URL: "postgres://{{ .Values.database.user }}:{{ .Values.secrets.dbPassword }}@127.0.0.1:5432/{{ .Values.database.name }}?sslmode=disable"
 
   # AWS/Storage (varios componentes lo usan)

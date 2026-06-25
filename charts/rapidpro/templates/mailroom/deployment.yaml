@@ -43,16 +43,7 @@ spec:
                 configMapKeyRef:
                   name: {{ include "rapidpro.fullname" . }}-config
                   key: VALKEY_URL
-            # - name: MAILROOM_ELASTIC #old
-            #   valueFrom:
-            #     configMapKeyRef:
-            #       name: {{ include "rapidpro.fullname" . }}-config
-            #       key: ELASTIC_URL
-            - name: MAILROOM_ELASTIC_ENDPOINT #new variable
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ include "rapidpro.fullname" . }}-config
-                  key: ELASTIC_URL
+                  
             - name: MAILROOM_AUTH_TOKEN
               valueFrom:
                 secretKeyRef:

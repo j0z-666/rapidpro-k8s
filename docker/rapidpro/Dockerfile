@@ -35,7 +35,7 @@ RUN npm install -g yarn less
 # Clonar RapidPro
 #
 RUN git clone --branch ${RAPIDPRO_VERSION} \
-    https://github.com/nyaruka/rapidpro.git .
+    https://github.com/j0z-666/rapidpro.git .
 
 RUN yarn install
 

@@ -10,9 +10,9 @@ echo "Building RapidPro..."
 
 docker build \
   --no-cache \
-  --build-arg RAPIDPRO_VERSION=v26.2.2 \
-  -t rapidpro:v26.2.2 \
-  -t $REGISTRY/rapidpro:v26.2.2 \
+  --build-arg RAPIDPRO_VERSION=nonoBranch \
+  -t rapidpro:nonoBranch \
+  -t $REGISTRY/rapidpro:nonoBranch \
   ./docker/rapidpro
 
 echo "Building Mailroom..."
