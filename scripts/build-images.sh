@@ -38,7 +38,7 @@ echo "Building Indexer..."
 
 echo "Pushing images to Google Artifact Registry..."
 
-docker push $REGISTRY/rapidpro:v26.2.2
+docker push $REGISTRY/rapidpro:nonoBranch
 docker push $REGISTRY/mailroom:v26.2.0
 docker push $REGISTRY/courier:v26.2.1
 # docker push $REGISTRY/indexer:$VERSION2601
