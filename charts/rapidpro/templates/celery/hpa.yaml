@@ -1,0 +1,27 @@
+{{- if .Values.autoscaling.celery.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "rapidpro.fullname" . }}-celery
+  labels:
+    {{- include "rapidpro.labels" . | nindent 4 }}
+    component: celery
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "rapidpro.fullname" . }}-celery
+  minReplicas: {{ .Values.autoscaling.celery.minReplicas }}
+  maxReplicas: {{ .Values.autoscaling.celery.maxReplicas }}
+  metrics:
+    # ContainerResource apunta al contenedor de la app (no al sidecar
+    # cloudsql-proxy) para que la CPU no se diluya. Estable desde K8s 1.27.
+    # NOTA: para escalar por longitud de cola en Redis se necesita KEDA (fase 2).
+    - type: ContainerResource
+      containerResource:
+        name: cpu
+        container: celery
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.autoscaling.celery.targetCPUUtilizationPercentage }}
+{{- end }}

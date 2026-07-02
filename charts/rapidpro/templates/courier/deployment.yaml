@@ -5,7 +5,9 @@ metadata:
   labels:
     {{- include "rapidpro.labels" . | nindent 4 }}
 spec:
+  {{- if not .Values.autoscaling.courier.enabled }}
   replicas: {{ .Values.replicaCount.courier }}
+  {{- end }}
   selector:
     matchLabels:
       {{- include "rapidpro.selectorLabels" . | nindent 6 }}

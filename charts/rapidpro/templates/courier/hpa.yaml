@@ -1,0 +1,27 @@
+{{- if .Values.autoscaling.courier.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "rapidpro.fullname" . }}-courier
+  labels:
+    {{- include "rapidpro.labels" . | nindent 4 }}
+    component: courier
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "rapidpro.fullname" . }}-courier
+  minReplicas: {{ .Values.autoscaling.courier.minReplicas }}
+  maxReplicas: {{ .Values.autoscaling.courier.maxReplicas }}
+  metrics:
+    # ContainerResource apunta al contenedor de la app (no al sidecar
+    # cloudsql-proxy) para que la CPU no se diluya. Estable desde K8s 1.27.
+    # NOTA: courier es candidato ideal a KEDA (escalar por cola Redis) -> fase 2.
+    - type: ContainerResource
+      containerResource:
+        name: cpu
+        container: courier
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.autoscaling.courier.targetCPUUtilizationPercentage }}
+{{- end }}
