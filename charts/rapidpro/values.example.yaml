@@ -1,0 +1,156 @@
+# Archivo de ejemplo. Copia este archivo a values.yaml y rellena los valores reales.
+#   cp values.example.yaml values.yaml
+# values.yaml está en .gitignore y NO debe subirse (contiene secretos).
+
+# Configuración general
+replicaCount:
+  rapidpro: 1
+  celery: 1
+  courier: 1
+  mailroom: 1
+  indexer: 1
+
+# Imágenes
+images:
+  rapidpro:
+    repository: us-central1-docker.pkg.dev/PROYECTO/REPO/rapidpro
+    tag: v26.0.0
+    pullPolicy: Always
+
+  mailroom:
+    repository: us-central1-docker.pkg.dev/PROYECTO/REPO/mailroom
+    tag: v26.0.0
+    pullPolicy: Always
+
+  courier:
+    repository: us-central1-docker.pkg.dev/PROYECTO/REPO/courier
+    tag: v26.0.1
+    pullPolicy: Always
+
+  indexer:
+    repository: us-central1-docker.pkg.dev/PROYECTO/REPO/indexer
+    tag: v26.0.1
+    pullPolicy: Always
+
+# Base de datos (Cloud SQL)
+database:
+  host: "CLOUD_SQL_HOST_O_IP"       # O el nombre interno si usas proxy
+  port: 5432
+  name: "postgres"
+  user: "postgres"
+
+# Redis (Memorystore)
+redis:
+  host: "MEMORYSTORE_IP"
+  port: "6379"
+  db: "0"
+
+# Elasticsearch (Elastic Cloud)
+elastic:
+  host: "elasticsearch-master"
+  port: "9200"
+
+# AWS/GCS Configuration
+aws:
+  region: "auto"
+
+# GCS/MinIO Configuration
+storage:
+  sessionsBucket: "rapidpro-sessions"
+  attachmentsBucket: "rapidpro-attachments"
+  endpoint: "https://storage.googleapis.com"  # Para MinIO, en GCS usar "https://storage.googleapis.com"
+  pathStyle: true  # true para MinIO, false para GCS
+
+# DynamoDB
+dynamodb:
+  endpoint: "http://dynamodb:8000"
+  tablePrefix: "Test"
+
+# Email Configuration
+email:
+  host: "smtp.gmail.com"
+  port: "587"
+  useTLS: "true"
+  useSSL: "false"
+  fromEmail: "CORREO_REMITENTE"
+
+# Cloud SQL
+cloudsql:
+  instanceConnectionName: "PROYECTO:REGION:INSTANCIA"
+
+# Tokens
+tokens:
+  mailroomAuthToken: "GENERA_UN_TOKEN"
+  courierAuthToken: "GENERA_UN_TOKEN"
+
+# Recursos
+resources:
+  rapidpro:
+    requests:
+      memory: 100m
+      cpu: "250m"
+    limits:
+      memory: "1Gi"
+      cpu: "500m"
+  celery:
+    requests:
+      memory: "256Mi"
+      cpu: "100m"
+    limits:
+      memory: "512Mi"
+      cpu: "250m"
+  default:
+    requests:
+      memory: "256Mi"
+      cpu: "100m"
+    limits:
+      memory: "512Mi"
+      cpu: "200m"
+
+# Secrets (rellenar con valores reales - NO commitear)
+secrets:
+  djangoSecretKey: "CAMBIAR_CLAVE_DJANGO"
+  dbPassword: "CAMBIAR_PASSWORD_BD"
+  encryptionKey: "CAMBIAR_ENCRYPTION_KEY"
+  emailPassword: "CAMBIAR_PASSWORD_EMAIL"
+  awsAccessKeyId: "CAMBIAR_ACCESS_KEY_ID"
+  awsSecretAccessKey: "CAMBIAR_SECRET_ACCESS_KEY"
+
+# Ingress
+ingress:
+  enabled: true
+  hostname: "rapidpro.ejemplo.mx"
+  staticIpName: "rapidpro-public-ip"
+  className: gce  # or you may leave this blank ("") for the default GKE controller.
+  tls:
+    enabled: true
+    managedCertificateName: rapidpro-tls
+
+## Test de gcs con service account
+# 1. Montar el volumen usando el nombre dinámico del Secret creado por Helm
+volumes:
+  - name: gcs-key
+    secret:
+      # Si tu release de helm se llama "rapidpro-prod", el secret se llamará "rapidpro-prod-gcs-credentials"
+      secretName: rapidpro-gcs-credentials
+
+volumeMounts:
+  - name: gcs-key
+    mountPath: /var/secrets/google
+    readOnly: true
+
+# 2. Configuración del backend de Google Cloud para Django
+extraEnv:
+  - name: DJANGO_STORAGE_BACKEND
+    value: "storages.backends.gcloud.GoogleCloudStorage"
+
+  - name: GS_BUCKET_NAME
+    value: "tu-bucket-rapidpro-static" # El bucket de tus estáticos
+
+  - name: GOOGLE_APPLICATION_CREDENTIALS
+    value: "/var/secrets/google/gcs-sa.json" # Ruta del archivo montado
+
+  - name: GS_DEFAULT_ACL
+    value: "publicRead"
+  - name: GS_QUERYSTRING_AUTH
+    value: "False"
