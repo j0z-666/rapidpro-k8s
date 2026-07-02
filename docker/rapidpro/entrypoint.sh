@@ -15,8 +15,8 @@ if [ "$ACTION" = "webapp" ]; then
 
     exec poetry run gunicorn temba.wsgi:application \
         --bind 0.0.0.0:8000 \
-        --workers 2 \
-        --threads 2 \
+        --workers 1 \
+        --threads 5 \
         --timeout 60
 
 elif [ "$ACTION" = "celery" ]; then

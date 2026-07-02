@@ -35,14 +35,14 @@ RUN npm install -g yarn less
 # Clonar RapidPro
 #
 RUN git clone --branch ${RAPIDPRO_VERSION} \
-    https://github.com/j0z-666/rapidpro.git .
+    https://github.com/moisesmoussan/rapidpro-nono-dev-v2.git .
 
 RUN yarn install
 
 #
 # Settings custom
-#
-COPY settings.py /rapidpro/temba/settings.py
+# Alberto Los settings estan en el repositorio ahora /temba.settings.py
+#COPY settings.py /rapidpro/temba/settings.py 
 
 #
 # Entrypoint
